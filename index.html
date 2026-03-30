@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vervox — Smart Phone Ordering for Restaurants</title>
+    <meta name="description"
+        content="Vervox answers every call, takes orders, and books reservations 24/7. Never miss another order." />
+    <!-- Sharp, clean, non-AI vibe font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray1: #111111;
+            --gray2: #333333;
+            --gray3: #555555;
+            --gray4: #888888;
+            --gray5: #E5E5E5;
+            --gray6: #F5F5F5;
+            --accent: #D32F2F;
+            /* Sharp Red Accent */
+            --accent-hover: #B71C1C;
+            --border: #E0E0E0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--white);
+            color: var(--gray2);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            height: 72px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--black);
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: var(--gray2);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color .2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--black);
+        }
+
+        .nav-cta {
+            background: var(--black);
+            color: var(--white) !important;
+            padding: 12px 24px !important;
+            border-radius: 0;
+            /* Sharp edges */
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            transition: background .2s !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--gray2) !important;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 24px;
+            height: 2px;
+            background: var(--black);
+        }
+
+        /* HERO - SPLIT LAYOUT (No gradients, sharp) */
+        .hero {
+            margin-top: 72px;
+            min-height: calc(100vh - 72px);
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: inherit;
+        }
+
+        .hero-content {
+            padding: 80px 48px 80px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-image-wrap {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-image-wrap img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            /* Pure image, no color gradient */
+        }
+
+        /* Hero Content */
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            background: var(--gray6);
+            color: var(--gray2);
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+            border-left: 3px solid var(--accent);
+            text-transform: uppercase;
+            align-self: flex-start;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 5vw, 64px);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            color: var(--black);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero-sub {
+            font-size: clamp(16px, 1.5vw, 18px);
+            color: var(--gray3);
+            max-width: 480px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--white);
+            padding: 16px 32px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: background .2s;
+            border: none;
+            cursor: pointer;
+            /* Sharp corners */
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--black);
+            border: 2px solid var(--black);
+            padding: 14px 30px;
+            /* adjusted for border */
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all .2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .hero-stat-num {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--black);
+            display: block;
+            line-height: 1.2;
+        }
+
+        .hero-stat-lbl {
+            font-size: 13px;
+            color: var(--gray3);
+            font-weight: 500;
+        }
+
+        /* LOSS BAR */
+        .loss-bar {
+            background: var(--black);
+            padding: 24px 32px;
+        }
+
+        .loss-bar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .loss-bar-icon {
+            flex-shrink: 0;
+        }
+
+        .loss-bar-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--white);
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .loss-bar-text {
+            font-size: 15px;
+            color: var(--white);
+            line-height: 1.6;
+        }
+
+        .loss-bar-text strong {
+            color: var(--accent);
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 96px 32px;
+        }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 64px;
+        }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 3.5vw, 48px);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            color: var(--black);
+        }
+
+        .section-title span {
+            color: var(--accent);
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 0;
+        }
+
+        /* PROBLEM */
+        .problem {
+            background: var(--white);
+        }
+
+        .problem-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .problem-img {
+            position: relative;
+            /* Sharp corners */
+        }
+
+        .problem-img img {
+            width: 100%;
+            height: 540px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .problem-img-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: var(--black);
+            padding: 24px;
+            max-width: 80%;
+        }
+
+        .problem-img-caption p {
+            font-size: 15px;
+            color: var(--white);
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .problem-list {
+            list-style: none;
+            margin-top: 24px;
+        }
+
+        .problem-list li {
+            display: flex;
+            gap: 16px;
+            padding: 20px 0;
+            border-top: 1px solid var(--border);
+            align-items: flex-start;
+        }
+
+        .problem-list-num {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent);
+            min-width: 24px;
+        }
+
+        .problem-list h4 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 6px;
+        }
+
+        .problem-list p {
+            font-size: 15px;
+            color: var(--gray3);
+            line-height: 1.6;
+        }
+
+        /* HOW IT WORKS */
+        .how {
+            background: var(--gray6);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .step-card {
+            background: var(--white);
+            padding: 40px 32px;
+            border: 1px solid var(--border);
+            transition: border-color .2s;
+        }
+
+        .step-card:hover {
+            border-color: var(--black);
+        }
+
+        .step-num {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--gray5);
+            line-height: 1;
+            margin-bottom: 24px;
+        }
+
+        .step-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 12px;
+        }
+
+        .step-card p {
+            font-size: 15px;
+            color: var(--gray3);
+            line-height: 1.6;
+        }
+
+        /* USE CASES */
+        .usecases {
+            background: var(--white);
+        }
+
+        .usecases-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .usecase-card {
+            padding: 32px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            transition: background .2s;
+        }
+
+        .usecase-card:hover {
+            background: var(--gray6);
+        }
+
+        .usecase-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .usecase-card h3::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+        }
+
+        .usecase-card p {
+            font-size: 15px;
+            color: var(--gray3);
+            line-height: 1.6;
+        }
+
+        /* PHOTO SPLIT */
+        .photo-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .photo-split img {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-split-content {
+            background: var(--black);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 64px;
+        }
+
+        .photo-split-content .section-label {
+            color: var(--gray4);
+            margin-bottom: 16px;
+        }
+
+        .photo-split-content h2 {
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.15;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .stat-box {
+            border-left: 2px solid var(--accent);
+            padding-left: 16px;
+        }
+
+        .stat-box-num {
+            display: block;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-box-lbl {
+            font-size: 14px;
+            color: var(--gray5);
+            line-height: 1.4;
+        }
+
+        /* COMPARISON */
+        .compare {
+            background: var(--white);
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--border);
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 20px 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .compare-table th {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gray3);
+            background: var(--gray6);
+        }
+
+        .compare-table th.highlight {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .compare-table td {
+            font-size: 16px;
+            color: var(--gray2);
+        }
+
+        .compare-table td:first-child {
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .compare-table td.highlight {
+            background: var(--gray6);
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .check-icon {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        .cross-icon {
+            color: var(--gray4);
+        }
+
+        /* PRICING */
+        .pricing {
+            background: var(--gray6);
+        }
+
+        .pricing-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 64px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .pricing-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 48px 32px;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--black);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 16px;
+        }
+
+        .pricing-plan {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .pricing-per-day {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--black);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .pricing-per-day span {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray3);
+        }
+
+        .pricing-per-month {
+            font-size: 15px;
+            color: var(--gray3);
+            margin-bottom: 32px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 15px;
+            color: var(--gray2);
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        .pricing-cta {
+            display: block;
+            text-align: center;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid var(--black);
+            color: var(--black);
+            transition: all .2s;
+        }
+
+        .pricing-cta.primary {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .pricing-cta:hover {
+            background: var(--gray1);
+            color: var(--white);
+        }
+
+        /* OBJECTIONS */
+        .objections {
+            background: var(--white);
+        }
+
+        .objections-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .objection-item {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 32px;
+        }
+
+        .objection-q {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 12px;
+        }
+
+        .objection-a {
+            font-size: 15px;
+            color: var(--gray3);
+            line-height: 1.6;
+        }
+
+        /* FINAL CTA */
+        .final-cta {
+            background: var(--black);
+            padding: 120px 32px;
+            text-align: center;
+        }
+
+        .final-cta-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(40px, 5vw, 64px);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.1;
+            margin-bottom: 32px;
+            letter-spacing: -1px;
+        }
+
+        .final-cta h2 span {
+            color: var(--accent);
+        }
+
+        .final-cta p {
+            font-size: 20px;
+            color: var(--gray5);
+            margin-bottom: 48px;
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--white);
+            padding: 48px 32px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--black);
+            letter-spacing: -0.5px;
+        }
+
+        .footer-logo span {
+            color: var(--accent);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-links a {
+            font-size: 14px;
+            color: var(--gray3);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--black);
+        }
+
+        /* REVEAL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .6s ease-out, transform .6s ease-out;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* MOBILE */
+        @media(max-width:992px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-image-wrap {
+                height: 400px;
+                order: -1;
+            }
+
+            .problem-split {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-img img {
+                height: 400px;
+            }
+
+            .steps-grid,
+            .usecases-grid,
+            .pricing-grid,
+            .objections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .photo-split {
+                grid-template-columns: 1fr;
+            }
+
+            .photo-split img {
+                height: 300px;
+            }
+
+            .nav-links,
+            .nav-cta {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            section {
+                padding: 64px 24px;
+            }
+
+            .hero-content {
+                padding: 48px 24px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-inner">
+            <div class="logo">Ver<span>vox</span></div>
+            <div class="nav-links">
+                <a href="#problem">The Problem</a>
+                <a href="#how">How It Works</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <a href="#contact" class="nav-cta">Start Free Trial</a>
+            <div class="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-inner">
+            <div class="hero-content">
+                <!-- Changed hero tag -->
+                <div class="hero-tag">Smart Phone Ordering System</div>
+                <h1>Your phones answered. <br><span>Every order.</span> Every time.</h1>
+                <p class="hero-sub">Vervox answers calls, takes orders, and handles customer questions automatically.
+                    Your staff never has to touch a phone again.</p>
+
+                <div class="hero-actions">
+                    <a href="#contact" class="btn-primary">Start Your Free 7-Day Trial</a>
+                    <a href="#how" class="btn-secondary">See how it works</a>
+                </div>
+
+                <div class="hero-stats">
+                    <div>
+                        <span class="hero-stat-num">40%</span>
+                        <div class="hero-stat-lbl">Missed calls during rush</div>
+                    </div>
+                    <div>
+                        <span class="hero-stat-num">24/7</span>
+                        <div class="hero-stat-lbl">Continuous coverage</div>
+                    </div>
+                    <div>
+                        <span class="hero-stat-num">24-48 hrs</span>
+                        <div class="hero-stat-lbl">Setup time to go live</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image-wrap">
+                <!-- Clean, untinted image per requirement "use real images... no gradient" -->
+                <img src="https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?w=1200&q=80&fit=crop"
+                    alt="Restaurant interior" />
+            </div>
+        </div>
+    </section>
+
+    <!-- LOSS BAR -->
+    <div class="loss-bar">
+        <div class="loss-bar-inner">
+            <div class="loss-bar-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+            </div>
+            <p class="loss-bar-text">
+                <strong>The average restaurant loses $8,400 every month to missed phone orders.</strong> That is not a
+                staffing problem — it is a systems problem. Vervox fixes it for less than $7 a day.
+            </p>
+        </div>
+    </div>
+
+    <!-- PROBLEM -->
+    <section class="problem" id="problem">
+        <div class="section-inner">
+            <div class="problem-split">
+                <div class="problem-img reveal">
+                    <img src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=800&q=80&fit=crop"
+                        alt="Busy restaurant kitchen" />
+                    <div class="problem-img-caption">
+                        <p>"We miss calls during rush — there is no time to answer. Customers just hang up and order
+                            somewhere else."</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="section-header">
+                        <span class="section-label reveal">The Problem</span>
+                        <h2 class="section-title reveal">Your phones are costing you <span>more than you think.</span>
+                        </h2>
+                    </div>
+                    <ul class="problem-list">
+                        <li class="reveal">
+                            <div class="problem-list-num">01</div>
+                            <div>
+                                <h4>Missed calls during rush hour</h4>
+                                <p>Staff cannot serve tables and answer phones at the same time. Calls get ignored.
+                                    Orders walk out the door.</p>
+                            </div>
+                        </li>
+                        <li class="reveal">
+                            <div class="problem-list-num">02</div>
+                            <div>
+                                <h4>After-hours lost revenue</h4>
+                                <p>Customers call after you close to book reservations or ask about catering. Unanswered
+                                    calls go right to your competitor.</p>
+                            </div>
+                        </li>
+                        <li class="reveal">
+                            <div class="problem-list-num">03</div>
+                            <div>
+                                <h4>Repetitive questions</h4>
+                                <p>"Are you open?" "Do you deliver?" Constant basic questions waste 3–4 hours of staff
+                                    time every single day.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how" id="how">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-label reveal">How It Works</span>
+                <h2 class="section-title reveal">Live in 24-48 hours. <span>Running forever.</span></h2>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card reveal">
+                    <div class="step-num">1</div>
+                    <h3>Send your menu</h3>
+                    <p>Give us your menu, hours, and location. We program the system on all your items, prices, and
+                        modifiers in 24 hours.</p>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-num">2</div>
+                    <h3>System goes live</h3>
+                    <p>Forward your existing number to Vervox. Customers call the same number, but they never have to
+                        wait on hold again.</p>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-num">3</div>
+                    <h3>Orders arrive</h3>
+                    <p>Every order taken is instantly sent to you via email or SMS with full customer details, ready for
+                        the kitchen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- USE CASES -->
+    <section class="usecases" id="usecases">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-label reveal">Capabilities</span>
+                <h2 class="section-title reveal">One system. <span>Everything handled.</span></h2>
+            </div>
+            <div class="usecases-grid">
+                <div class="usecase-card reveal">
+                    <h3>Peak-Hour Handling</h3>
+                    <p>Answers every single call instantly during the lunch and dinner rush. No dropped calls.</p>
+                </div>
+                <div class="usecase-card reveal">
+                    <h3>Full Order Taking</h3>
+                    <p>Takes accurate phone orders including items, modifiers, and pickup/delivery details instantly.
+                    </p>
+                </div>
+                <div class="usecase-card reveal">
+                    <h3>Reservation Booking</h3>
+                    <p>Collects reservation details, confirms, and alerts your host staff in real-time.</p>
+                </div>
+                <div class="usecase-card reveal">
+                    <h3>FAQ Answering</h3>
+                    <p>Handles questions about hours, vegan options, location, and simple inquiries automatically.</p>
+                </div>
+                <div class="usecase-card reveal">
+                    <h3>After-Hours</h3>
+                    <p>Captures late-night inquiries and catering reservations even when the restaurant is closed.</p>
+                </div>
+                <div class="usecase-card reveal">
+                    <h3>Catering Leads</h3>
+                    <p>Qualifies large event catering details and sends the lead contact information straight to
+                        management.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHOTO SPLIT / THE NUMBERS -->
+    <div class="photo-split">
+        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80&fit=crop"
+            alt="Restaurant atmosphere" class="reveal" />
+        <div class="photo-split-content reveal">
+            <span class="section-label">The Numbers</span>
+            <h2>What unanswered calls<br>actually cost you.</h2>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <span class="stat-box-num">$8,400</span>
+                    <div class="stat-box-lbl">average monthly revenue lost to missed calls</div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-box-num">40%</span>
+                    <div class="stat-box-lbl">of calls go unanswered during peak hours</div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-box-num">45 sec</span>
+                    <div class="stat-box-lbl">before a customer hangs up on hold</div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-box-num">3 hrs</span>
+                    <div class="stat-box-lbl">daily staff time lost to repetitive phone calls</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPARISON -->
+    <section class="compare" id="compare">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-label reveal">Cost Breakdown</span>
+                <h2 class="section-title reveal">Vervox vs. <span>Manual Staffing</span></h2>
+            </div>
+            <div class="reveal">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Part-Time Staff</th>
+                            <th class="highlight">Vervox</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Monthly cost</td>
+                            <td>$2,800+</td>
+                            <td class="highlight">From $197/mo</td>
+                        </tr>
+                        <tr>
+                            <td>Available 24/7</td>
+                            <td><span class="cross-icon">✕</span></td>
+                            <td class="highlight"><span class="check-icon">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Never puts on hold</td>
+                            <td><span class="cross-icon">✕</span></td>
+                            <td class="highlight"><span class="check-icon">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Zero order mistakes</td>
+                            <td><span class="cross-icon">✕</span></td>
+                            <td class="highlight"><span class="check-icon">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Setup time</td>
+                            <td>2–4 weeks</td>
+                            <td class="highlight">24-48 hours</td>
+                        </tr>
+                        <tr>
+                            <td>Sick days</td>
+                            <td>Constant</td>
+                            <td class="highlight">Never</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+        <div class="section-inner">
+            <div class="pricing-header reveal">
+                <span class="section-label">Pricing</span>
+                <h2 class="section-title">Less than one missed order. <br><span>Every month.</span></h2>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card reveal">
+                    <div class="pricing-plan">Starter</div>
+                    <div class="pricing-per-day">$6.57<span>/day</span></div>
+                    <div class="pricing-per-month">Billed $197/month</div>
+                    <ul class="pricing-features">
+                        <li>150 minutes per month</li>
+                        <li>24/7 call answering</li>
+                        <li>Order taking and FAQ</li>
+                        <li>Email order alerts</li>
+                        <li>Custom menu training</li>
+                    </ul>
+                    <a href="#contact" class="pricing-cta">Start Free Trial</a>
+                </div>
+
+                <div class="pricing-card featured reveal">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-plan">Growth</div>
+                    <div class="pricing-per-day">$13.23<span>/day</span></div>
+                    <div class="pricing-per-month">Billed $397/month</div>
+                    <ul class="pricing-features">
+                        <li>350 minutes per month</li>
+                        <li>Reservation booking</li>
+                        <li>Catering lead capture</li>
+                        <li>SMS + email alerts</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#contact" class="pricing-cta primary">Start Free Trial</a>
+                </div>
+
+                <div class="pricing-card reveal">
+                    <div class="pricing-plan">Pro</div>
+                    <div class="pricing-per-day">$23.23<span>/day</span></div>
+                    <div class="pricing-per-month">Billed $697/month</div>
+                    <ul class="pricing-features">
+                        <li>750 minutes per month</li>
+                        <li>Multi-location support</li>
+                        <li>Custom voice selection</li>
+                        <li>POS integration assist</li>
+                        <li>Dedicated manager</li>
+                    </ul>
+                    <a href="#contact" class="pricing-cta">Start Free Trial</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OBJECTIONS -->
+    <section class="objections" id="objections">
+        <div class="section-inner">
+            <div class="section-header">
+                <span class="section-label reveal">FAQs</span>
+                <h2 class="section-title reveal">Common <span>Questions</span></h2>
+            </div>
+            <div class="objections-grid">
+                <div class="objection-item reveal">
+                    <div class="objection-q">Will customers know it's automated?</div>
+                    <p class="objection-a">The system uses a natural voice. Most customers simply want their order taken
+                        quickly and correctly without being placed on hold.</p>
+                </div>
+                <div class="objection-item reveal">
+                    <div class="objection-q">What if it gets an order wrong?</div>
+                    <p class="objection-a">It is programmed on your exact menu and reads back the full order before
+                        finishing the call. Accuracy is incredibly high.</p>
+                </div>
+                <div class="objection-item reveal">
+                    <div class="objection-q">I already have someone answering phones.</div>
+                    <p class="objection-a">Vervox handles the calls so your staff can focus 100% on serving in-house
+                        customers, improving service quality.</p>
+                </div>
+                <div class="objection-item reveal">
+                    <div class="objection-q">Is it complicated to set up?</div>
+                    <p class="objection-a">No technical work is required on your end. Supply your menu and hours, and we
+                        handle the total setup.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta" id="contact">
+        <div class="final-cta-inner">
+            <h2 class="reveal">Your next missed call is <span>already ringing.</span></h2>
+            <p class="reveal">Try Vervox free for 7 days. No contracts. Just a reliable system that takes every order.
+            </p>
+            <a href="mailto:complianceos.support@gmail.com?subject=Vervox Free Trial Request"
+                class="btn-primary reveal">Start My Free 7-Day Trial</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-logo">Ver<span>vox</span></div>
+            <div class="footer-links">
+                <a href="#problem">The Problem</a>
+                <a href="#how">How It Works</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // SCROLL REVEAL
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
